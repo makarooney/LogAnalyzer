@@ -61,6 +61,10 @@ public final class LogDataEntry implements LogData{
 		return userIp + " " + newTimeStamp + " " + action;
 	}
 
+	public String domain() {
+		return domain;
+	}
+	
 	@Override
 	//Expect data in format "Date Domain"
 	public String domainData() {
