@@ -1,22 +1,22 @@
 package loganalyzer;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
+//import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
+//import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-import org.junit.After;
-import org.junit.Before;
+//import org.junit.After;
+//import org.junit.Before;
 import org.junit.Test;
 
 public final class LogUsageDataTest {
 
 	//need to capture System.out.println output
-	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+//	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+//	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 	
 //	@Before
 //	public void setupStreams() {

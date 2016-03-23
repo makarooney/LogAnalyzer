@@ -8,10 +8,9 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public final class LogUsageData implements UsageData{
+	
 	private LargeLogFile logDataFile;
 	
-	// All data structures, saved for the List of popular domains,
-	// will erased for each new day that logs are captured.
 	private Map<String, Integer> UserDataHashMap;
 	
 	private Map<String, Integer> DomainHitHashMap;
@@ -20,7 +19,7 @@ public final class LogUsageData implements UsageData{
 	private List<PopularDomain> AllSecondPopularDomains;
 	
 	public LogUsageData(LargeLogFile logFile) {
-		//Initialize data structures
+
 		this.logDataFile = logFile;
 		
 		UserDataHashMap = new HashMap<String, Integer>();
@@ -34,29 +33,10 @@ public final class LogUsageData implements UsageData{
 		try {
 			String currentLine = logDataFile.readLine();
 			LogDataEntry logEntry = new LogDataEntry(currentLine);
-			String entryDate = logEntry.entryDate();
-			String currentDate =entryDate;
 			
 			while (! currentLine.equals("")) {
 				// update current entry info
 				logEntry = new LogDataEntry(currentLine);
-				entryDate = logEntry.entryDate();
-				
-				if( ! entryDate.equals(currentDate)) {
-					// Date has changed
-					
-					// 1- Display all daily log info, 
-					displayUserLogData();
-					
-					// 2- store current min heap item to list, 
-					AllSecondPopularDomains.add(PopularDomainsMinHeap.peek());
-					
-					// 3- clear data structures
-					clearDailyDataStructures();
-					
-					// Reset current date
-					currentDate = entryDate;
-				}
 
 				updateUserDataHashMap(logEntry);
 				updateDomainHashMap(logEntry);
@@ -64,6 +44,8 @@ public final class LogUsageData implements UsageData{
 				currentLine = logDataFile.readLine();
 			}
 			
+			//sort DomainHash by keyset into a sorted list
+			//Loop through list, and keep track of 
 			displayUserLogData();
 			AllSecondPopularDomains.add(PopularDomainsMinHeap.peek());
 			displaySecondPopularDomainData();
@@ -84,13 +66,7 @@ public final class LogUsageData implements UsageData{
 			UserDataHashMap.put(userDataKey, currentItemCount+1);
 		}
 	}
-	
-	private void clearDailyDataStructures() {
-		UserDataHashMap = new HashMap<String, Integer>();
-		DomainHitHashMap = new HashMap<String, Integer>();
-		PopularDomainsMinHeap = new PriorityQueue<PopularDomain>((a, b) -> a.count() - b.count());
-	}
-	
+		
 	public void updateDomainHashMap(LogDataEntry logEntry){
 		//Increment Part2
 		String domainDataKey = logEntry.domainData();
@@ -149,13 +125,9 @@ public final class LogUsageData implements UsageData{
 
 	
 	private void displayUserLogData() {
-//		List<String> sortedKeys = new ArrayList<String>(UserDataHashMap.keySet());
-//		Collections.sort(sortedKeys);
-//		sortedKeys.forEach(key -> System.out.println(key + " " + UserDataHashMap.get(key)));
-		
-		//Display key/value pairs without guaranteeing order, but more efficient if lots of different data.
-		UserDataHashMap.forEach((key,value) -> System.out.println(key + " " + value));
-
+		List<String> sortedKeys = new ArrayList<String>(UserDataHashMap.keySet());
+		Collections.sort(sortedKeys);
+		sortedKeys.forEach(key -> System.out.println(key + " " + UserDataHashMap.get(key)));
 	}
 
 	private void displaySecondPopularDomainData() {

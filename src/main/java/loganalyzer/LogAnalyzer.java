@@ -1,7 +1,6 @@
 package loganalyzer;
 
 import java.io.FileNotFoundException;
-import java.util.Date;
 
 public class LogAnalyzer {
 	
