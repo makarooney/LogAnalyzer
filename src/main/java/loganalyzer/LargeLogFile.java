@@ -12,17 +12,15 @@ public final class LargeLogFile implements LargeFile{
 	private FileInputStream largeFileStream;
 	private Scanner largeFileScanner;
 	
-	/**
-	 * 
-	 * @param filePath
-	 * @throws FileNotFoundException
-	 */
 	public LargeLogFile(String filePath) throws FileNotFoundException {
 		largeFileStream = new FileInputStream(filePath);
 		largeFileScanner = new Scanner(largeFileStream, "UTF-8");
 	}
 
 	@Override
+	/**
+	 * It is assumed that empty lines do not occur in standard log files, so they're not skipped.
+	 */
 	public String readLine() throws IOException {
 		String logLine = "";
 		try {

@@ -7,6 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Represents a single line from a log data file.
+ */
 public final class LogDataEntry implements LogData{
 	
 	//assume this date format is supported. Assume 24-hour format (HH is 0-23)
@@ -22,6 +25,11 @@ public final class LogDataEntry implements LogData{
 		tokenizeLogEntry(logLine);
 	}
 	
+	/**
+	 * Internal helper method for tokenizing a log entry (i.e. a single line from a log file).
+	 * @param logLine Will be of the format [Timestamp] [IP] [GET/POST action] [domain]
+	 * @throws ParseException is thrown if date and time format is not the expected "yyyy/MM/dd HH:mm:ss"
+	 */
 	private void tokenizeLogEntry(String logLine) throws ParseException {
 		String [] logData = logLine.split(",");
 		if (logData.length != 4) {
@@ -34,6 +42,13 @@ public final class LogDataEntry implements LogData{
 		}
 	}
 	
+	/**
+	 * Parser will not automatically throw exception if invalid format detected. Instead, it will
+	 * merely stop parsing before the end of the string. 
+	 * 
+	 * This helper method checks to see if parsing was successful by making sure the parser index
+	 * reaches the end of the string to parse.
+	 */
 	private Date parseDateToExpectedFormat(String dateToBeFormatted, SimpleDateFormat expectedFormat) throws ParseException {
 		ParsePosition p = new ParsePosition(0);
 		expectedFormat.setLenient(false);
@@ -49,8 +64,12 @@ public final class LogDataEntry implements LogData{
 	}
 	
 	@Override
-	//Expect data in format "IP Timestamp Action"
-	//The Timestamp will have the minute and seconds set to "00"
+
+	/**
+	 * Expect data in format "IP Timestamp Action Domain"
+	 * The Timestamp will have the minute and seconds set to "00" as per requirements to
+	 * group items in hourly buckets.
+	 */
 	public String userData() {
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(dateTime);
@@ -66,13 +85,18 @@ public final class LogDataEntry implements LogData{
 	}
 	
 	@Override
-	//Expect data in format "Date Domain"
+	/**
+	 * Helper method that simply returns a string with [Date] [Domain]. 
+	 */
 	public String domainData() {
 		String dateOnly = entryDate();
 		return dateOnly + " " + domain;
 	}
 	
 	@Override
+	/**
+	 * Helper method that simply returns the date portion of the Timestamp from log file entry.
+	 */
 	public String entryDate() {
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(dateTime);
